@@ -1,5 +1,5 @@
 {
-    "name": "com.jordantama.ui",
+    "name": "com.jordantama.ui-framework",
     "rootNamespace": "JordanTama.UI",
     "references": [],
     "includePlatforms": [],
