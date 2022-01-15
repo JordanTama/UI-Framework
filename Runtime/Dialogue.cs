@@ -21,7 +21,7 @@ namespace UI.Core
 
         private void Awake()
         {
-            manager = ManagerLocator.Get<UIManager>();
+            manager = UIManager.Instance;
             canvasGroup = GetComponent<CanvasGroup>();
             
             OnAwake();
