@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JordanTama.UI;
 using Managers;
+using UnityEngine;
 
 namespace UI.Core
 {
@@ -13,6 +15,19 @@ namespace UI.Core
     {
         internal readonly Event<Dialogue> dialogueAdded = new Event<Dialogue>();
         private readonly List<Dialogue> dialogues = new List<Dialogue>();
+
+        private static UIManager instance;
+
+        public static UIManager Instance
+        {
+            get
+            {
+                if (instance || !Application.isPlaying)
+                    return instance;
+
+                return instance = Instantiate(Settings.UIManagerPrefab).GetComponent<UIManager>();
+            }
+        }
 
         /// <summary>
         /// Add a <see cref="Dialogue"/> to the top of the stack.
