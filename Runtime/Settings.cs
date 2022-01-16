@@ -1,6 +1,8 @@
 using System.IO;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace JordanTama.UI
 {
@@ -14,7 +16,8 @@ namespace JordanTama.UI
         
         private const string InstanceDirectory = "UI Framework/Cache/";
         private const string InstanceFileName = "Settings";
-        private const string PresetPath = "Packages/com.jordantama.ui-framework/Scriptable Objects/SettingsPreset.asset";
+        private const string PresetPath =
+            "Packages/com.jordantama.ui-framework/Scriptable Objects/SettingsPreset.asset";
 
         private static Settings instance;
 

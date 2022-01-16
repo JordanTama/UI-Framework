@@ -4,6 +4,7 @@ using System.Linq;
 using JordanTama.UI;
 using Managers;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace UI.Core
 {
@@ -13,9 +14,9 @@ namespace UI.Core
     [Serializable]
     public class UIManager : Manager
     {
-        internal readonly Event<Dialogue> dialogueAdded = new Event<Dialogue>();
+        internal readonly UnityEvent<Dialogue> DialogueAdded = new UnityEvent<Dialogue>();
+        
         private readonly List<Dialogue> dialogues = new List<Dialogue>();
-
         private static UIManager instance;
 
         public static UIManager Instance
@@ -25,7 +26,11 @@ namespace UI.Core
                 if (instance || !Application.isPlaying)
                     return instance;
 
-                return instance = Instantiate(Settings.UIManagerPrefab).GetComponent<UIManager>();
+                instance = Instantiate(Settings.UIManagerPrefab).GetComponent<UIManager>();
+                instance.name = instance.name.Replace("(Clone)", "");
+                DontDestroyOnLoad(instance.gameObject);
+
+                return instance;
             }
         }
 
@@ -41,7 +46,7 @@ namespace UI.Core
                 front.Demote();
 
             dialogues.Insert(0, dialogue);
-            dialogueAdded.Invoke(dialogue);
+            DialogueAdded.Invoke(dialogue);
 
             dialogue.Promote();
         }

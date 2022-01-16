@@ -4,31 +4,31 @@ using UnityEngine;
 namespace UI.Core
 {
     /// <summary>
-    /// A UIComponent is any UI element that exists as part of a <see cref="Dialogue"/>. All UI Elements should extend this class. 
+    /// A UIComponent is any UI element that exists as part of a <see cref="Core.Dialogue"/>. All UI Elements should extend this class. 
     /// </summary>
-    /// <typeparam name="T">The <see cref="Dialogue"/> type this UIComponent is a part of.</typeparam>
+    /// <typeparam name="T">The <see cref="Core.Dialogue"/> type this UIComponent is a part of.</typeparam>
     public abstract class DialogueComponent<T> : MonoBehaviour where T : Dialogue
     {
-        protected UIManager manager;
-        protected T dialogue;
+        protected UIManager Manager;
+        protected T Dialogue;
         
         
         #region MonoBehaviour
         
         private void Awake()
         {
-            manager = UIManager.Instance;
+            Manager = UIManager.Instance;
             OnComponentAwake();
         }
 
         private void OnEnable()
         {
-            dialogue = manager.GetDialogue<T>();
+            Dialogue = Manager.GetDialogue<T>();
             
-            if (dialogue)
+            if (Dialogue)
                 Subscribe();
             else
-                manager.dialogueAdded.AddListener(OnDialogueAdded);
+                Manager.DialogueAdded.AddListener(OnDialogueAdded);
             
             OnComponentEnabled();
         }
@@ -38,7 +38,7 @@ namespace UI.Core
             OnComponentDisabled();
             Unsubscribe();
             
-            dialogue = null;
+            Dialogue = null;
         }
 
         private void Start()
@@ -56,8 +56,8 @@ namespace UI.Core
             if (!(addedDialogue is T compatible))
                 return;
 
-            manager.dialogueAdded.RemoveListener(OnDialogueAdded);
-            dialogue = compatible;
+            Manager.DialogueAdded.RemoveListener(OnDialogueAdded);
+            Dialogue = compatible;
 
             Subscribe();
         }

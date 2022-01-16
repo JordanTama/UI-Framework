@@ -1,5 +1,6 @@
 ﻿using Managers;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace UI.Core
 {
@@ -9,9 +10,9 @@ namespace UI.Core
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Dialogue : MonoBehaviour
     {
-        internal readonly Event promoted = new Event();
-        internal readonly Event demoted = new Event();
-        internal readonly Event closed = new Event();
+        internal readonly UnityEvent promoted = new UnityEvent();
+        internal readonly UnityEvent demoted = new UnityEvent();
+        internal readonly UnityEvent closed = new UnityEvent();
         
         protected UIManager manager;
         protected CanvasGroup canvasGroup;
@@ -57,8 +58,7 @@ namespace UI.Core
             closed.Invoke();
         }
 
-        internal virtual void OnAwake() {}
-
+        protected virtual void OnAwake() {}
 
         protected abstract void OnClose();
 
