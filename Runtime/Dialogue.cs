@@ -51,7 +51,7 @@ namespace UI.Core
             demoted.Invoke();
         }
         
-        internal void Close()
+        public void Close()
         {
             OnClose();
             Destroy(gameObject);
