@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JordanTama.UI;
-using Managers;
+using ServiceLocator;
 using UnityEngine;
 using UnityEngine.Events;
+using Settings = JordanTama.UI.Settings;
 
 namespace UI.Core
 {
@@ -12,21 +12,21 @@ namespace UI.Core
     /// A singleton manager responsible for controlling the <see cref="Dialogue"/> 'stack'.
     /// </summary>
     [Serializable]
-    public class UIManager : Manager
+    public class UIService : Service
     {
         internal readonly UnityEvent<Dialogue> DialogueAdded = new UnityEvent<Dialogue>();
         
         private readonly List<Dialogue> dialogues = new List<Dialogue>();
-        private static UIManager instance;
+        private static UIService instance;
 
-        public static UIManager Instance
+        public static UIService Instance
         {
             get
             {
                 if (instance || !Application.isPlaying)
                     return instance;
 
-                instance = Instantiate(Settings.UIManagerPrefab).GetComponent<UIManager>();
+                instance = Instantiate(Settings.UIManagerPrefab).GetComponent<UIService>();
                 instance.name = instance.name.Replace("(Clone)", "");
                 DontDestroyOnLoad(instance.gameObject);
 

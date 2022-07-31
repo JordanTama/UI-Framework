@@ -8,7 +8,7 @@ namespace UI.Core
     /// <typeparam name="T">The <see cref="Core.Dialogue"/> type this UIComponent is a part of.</typeparam>
     public abstract class DialogueComponent<T> : MonoBehaviour where T : Dialogue
     {
-        protected UIManager Manager;
+        protected UIService Service;
         protected T Dialogue;
         
         
@@ -16,18 +16,18 @@ namespace UI.Core
         
         private void Awake()
         {
-            Manager = UIManager.Instance;
+            Service = UIService.Instance;
             OnComponentAwake();
         }
 
         private void OnEnable()
         {
-            Dialogue = Manager.GetDialogue<T>();
+            Dialogue = Service.GetDialogue<T>();
             
             if (Dialogue)
                 Subscribe();
             else
-                Manager.DialogueAdded.AddListener(OnDialogueAdded);
+                Service.DialogueAdded.AddListener(OnDialogueAdded);
             
             OnComponentEnabled();
         }
@@ -55,7 +55,7 @@ namespace UI.Core
             if (!(addedDialogue is T compatible))
                 return;
 
-            Manager.DialogueAdded.RemoveListener(OnDialogueAdded);
+            Service.DialogueAdded.RemoveListener(OnDialogueAdded);
             Dialogue = compatible;
 
             Subscribe();

@@ -1,5 +1,4 @@
-﻿using Managers;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 namespace UI.Core
@@ -14,7 +13,7 @@ namespace UI.Core
         internal readonly UnityEvent demoted = new UnityEvent();
         internal readonly UnityEvent closed = new UnityEvent();
         
-        protected UIManager manager;
+        protected UIService Service;
         protected CanvasGroup canvasGroup;
         
         
@@ -22,12 +21,12 @@ namespace UI.Core
 
         private void Awake()
         {
-            manager = UIManager.Instance;
+            Service = UIService.Instance;
             canvasGroup = GetComponent<CanvasGroup>();
             
             OnAwake();
             
-            manager.Add(this);
+            Service.Add(this);
         }
 
         #endregion
