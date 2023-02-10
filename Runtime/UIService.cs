@@ -77,13 +77,8 @@ namespace UI.Core
         /// <returns>Returns the first instance of <c>T</c> in the stack, starting from the top.</returns>
         internal T GetDialogue<T>() where T : Dialogue => _dialogues.Find(d => d is T) as T;
         
-        public void OnRegistered()
-        {
-            throw new NotImplementedException();
-        }
-        public void OnUnregistered()
-        {
-            throw new NotImplementedException();
-        }
+        public void OnRegistered() { }
+        
+        public void OnUnregistered() { }
     }
 }
