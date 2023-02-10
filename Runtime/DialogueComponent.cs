@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JordanTama.ServiceLocator;
+using UnityEngine;
 
 namespace UI.Core
 {
@@ -16,7 +17,7 @@ namespace UI.Core
         
         private void Awake()
         {
-            Service = UIService.Instance;
+            Locator.Get(out Service);
             OnComponentAwake();
         }
 

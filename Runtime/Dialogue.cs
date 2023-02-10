@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using JordanTama.ServiceLocator;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace UI.Core
@@ -9,20 +10,20 @@ namespace UI.Core
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Dialogue : MonoBehaviour
     {
-        internal readonly UnityEvent promoted = new UnityEvent();
-        internal readonly UnityEvent demoted = new UnityEvent();
-        internal readonly UnityEvent closed = new UnityEvent();
+        internal readonly UnityEvent Promoted = new();
+        internal readonly UnityEvent Demoted = new();
+        internal readonly UnityEvent Closed = new();
         
         protected UIService Service;
-        protected CanvasGroup canvasGroup;
+        protected CanvasGroup CanvasGroup;
         
         
         #region MonoBehaviour
 
         private void Awake()
         {
-            Service = UIService.Instance;
-            canvasGroup = GetComponent<CanvasGroup>();
+            Locator.Get(out Service);
+            CanvasGroup = GetComponent<CanvasGroup>();
             
             OnAwake();
             
@@ -36,25 +37,25 @@ namespace UI.Core
 
         internal void Promote()
         {
-            canvasGroup.interactable = true;
+            CanvasGroup.interactable = true;
             
             OnPromote();
-            promoted.Invoke();
+            Promoted.Invoke();
         }
 
         internal void Demote()
         {
-            canvasGroup.interactable = false;
+            CanvasGroup.interactable = false;
             
             OnDemote();
-            demoted.Invoke();
+            Demoted.Invoke();
         }
         
         public void Close()
         {
             OnClose();
             Destroy(gameObject);
-            closed.Invoke();
+            Closed.Invoke();
         }
 
         protected virtual void OnAwake() {}

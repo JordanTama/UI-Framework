@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ServiceLocator;
-using UnityEngine;
+using JordanTama.ServiceLocator;
 using UnityEngine.Events;
-using Settings = JordanTama.UI.Settings;
 
 namespace UI.Core
 {
@@ -12,27 +10,11 @@ namespace UI.Core
     /// A singleton manager responsible for controlling the <see cref="Dialogue"/> 'stack'.
     /// </summary>
     [Serializable]
-    public class UIService : Service
+    public class UIService : IService
     {
-        internal readonly UnityEvent<Dialogue> DialogueAdded = new UnityEvent<Dialogue>();
+        internal readonly UnityEvent<Dialogue> DialogueAdded = new();
         
-        private readonly List<Dialogue> dialogues = new List<Dialogue>();
-        private static UIService instance;
-
-        public static UIService Instance
-        {
-            get
-            {
-                if (instance || !Application.isPlaying)
-                    return instance;
-
-                instance = Instantiate(Settings.UIManagerPrefab).GetComponent<UIService>();
-                instance.name = instance.name.Replace("(Clone)", "");
-                DontDestroyOnLoad(instance.gameObject);
-
-                return instance;
-            }
-        }
+        private readonly List<Dialogue> _dialogues = new();
 
         /// <summary>
         /// Add a <see cref="Dialogue"/> to the top of the stack.
@@ -41,11 +23,11 @@ namespace UI.Core
         /// <typeparam name="T">The type of <see cref="Dialogue"/>.</typeparam>
         internal void Add<T>(T dialogue) where T : Dialogue
         {
-            Dialogue front = dialogues.FirstOrDefault();
+            Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
                 front.Demote();
 
-            dialogues.Insert(0, dialogue);
+            _dialogues.Insert(0, dialogue);
             DialogueAdded.Invoke(dialogue);
 
             dialogue.Promote();
@@ -57,7 +39,7 @@ namespace UI.Core
         /// <param name="dialogue">The <see cref="Dialogue"/> to remove.</param>
         internal void Remove(Dialogue dialogue)
         {
-            dialogues.Remove(dialogue);
+            _dialogues.Remove(dialogue);
             dialogue.Close();
         }
 
@@ -71,11 +53,11 @@ namespace UI.Core
 
             if (removed != null)
             {
-                dialogues.Remove(removed);
+                _dialogues.Remove(removed);
                 removed.Close();
             }
 
-            Dialogue front = dialogues.FirstOrDefault();
+            Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
                 front.Promote();
 
@@ -86,13 +68,22 @@ namespace UI.Core
         /// Queries the manager for the currently active <see cref="Dialogue"/> without altering the stack.
         /// </summary>
         /// <returns>Returns the currently active <see cref="Dialogue"/>.</returns>
-        internal Dialogue Peek() => dialogues.FirstOrDefault();
+        internal Dialogue Peek() => _dialogues.FirstOrDefault();
 
         /// <summary>
         /// Queries the manager for the highest instance of a <see cref="Dialogue"/> of type <c>T</c> in the stack.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="Dialogue"/> to search for.</typeparam>
         /// <returns>Returns the first instance of <c>T</c> in the stack, starting from the top.</returns>
-        internal T GetDialogue<T>() where T : Dialogue => dialogues.Find(d => d is T) as T;
+        internal T GetDialogue<T>() where T : Dialogue => _dialogues.Find(d => d is T) as T;
+        
+        public void OnRegistered()
+        {
+            throw new NotImplementedException();
+        }
+        public void OnUnregistered()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
