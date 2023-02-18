@@ -2,7 +2,7 @@
     "name": "com.jordantama.ui-framework",
     "rootNamespace": "JordanTama.UI",
     "references": [
-        "GUID:4f99915ebe03145f1846390637c71680"
+        "GUID:0065e20181cf54da8ac5c5d251da6f08"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
