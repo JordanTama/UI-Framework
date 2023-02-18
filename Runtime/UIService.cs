@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JordanTama.ServiceLocator;
@@ -21,54 +22,53 @@ namespace UI.Core
         /// </summary>
         /// <param name="dialogue">The <see cref="Dialogue"/> to be added.</param>
         /// <typeparam name="T">The type of <see cref="Dialogue"/>.</typeparam>
-        internal void Add<T>(T dialogue) where T : Dialogue
+        internal IEnumerator Add<T>(T dialogue) where T : Dialogue
         {
             Dialogue front = _dialogues.FirstOrDefault();
-            if (front != null)
-                front.Demote();
-
+            
             _dialogues.Insert(0, dialogue);
             DialogueAdded.Invoke(dialogue);
+            
+            if (front != null)
+                yield return front.StartCoroutine(front.Demote());
 
-            dialogue.Promote();
+            yield return dialogue.StartCoroutine(dialogue.Promote());
         }
 
         /// <summary>
         /// Remove a <see cref="Dialogue"/> from the stack.
         /// </summary>
         /// <param name="dialogue">The <see cref="Dialogue"/> to remove.</param>
-        internal void Remove(Dialogue dialogue)
+        internal IEnumerator Remove(Dialogue dialogue)
         {
             _dialogues.Remove(dialogue);
-            dialogue.Close();
+            yield return dialogue.Close();
         }
 
         /// <summary>
         /// Remove the currently active <see cref="Dialogue"/> from the top of the stack.
         /// </summary>
         /// <returns>Returns the <see cref="Dialogue"/> that was removed.</returns>
-        public Dialogue Pop()
+        public IEnumerator Pop()
         {
             Dialogue removed = Peek();
 
             if (removed != null)
             {
                 _dialogues.Remove(removed);
-                removed.Close();
+                yield return removed.StartCoroutine(removed.Close());
             }
 
             Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
-                front.Promote();
-
-            return removed;
+                yield return front.StartCoroutine(front.Promote());
         }
 
         /// <summary>
         /// Queries the manager for the currently active <see cref="Dialogue"/> without altering the stack.
         /// </summary>
         /// <returns>Returns the currently active <see cref="Dialogue"/>.</returns>
-        internal Dialogue Peek() => _dialogues.FirstOrDefault();
+        public Dialogue Peek() => _dialogues.FirstOrDefault();
 
         /// <summary>
         /// Queries the manager for the highest instance of a <see cref="Dialogue"/> of type <c>T</c> in the stack.

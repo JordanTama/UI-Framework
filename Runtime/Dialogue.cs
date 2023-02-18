@@ -1,4 +1,5 @@
-﻿using JordanTama.ServiceLocator;
+﻿using System.Collections;
+using JordanTama.ServiceLocator;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,9 +11,9 @@ namespace UI.Core
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Dialogue : MonoBehaviour
     {
-        internal readonly UnityEvent Promoted = new();
-        internal readonly UnityEvent Demoted = new();
-        internal readonly UnityEvent Closed = new();
+        public readonly UnityEvent Promoted = new();
+        public readonly UnityEvent Demoted = new();
+        public readonly UnityEvent Closed = new();
         
         protected UIService Service;
         protected CanvasGroup CanvasGroup;
@@ -27,7 +28,7 @@ namespace UI.Core
             
             OnAwake();
             
-            Service.Add(this);
+            StartCoroutine(Service.Add(this));
         }
 
         #endregion
@@ -35,36 +36,32 @@ namespace UI.Core
         
         #region Dialogue
 
-        internal void Promote()
+        internal IEnumerator Promote()
         {
             CanvasGroup.interactable = true;
-            
-            OnPromote();
             Promoted.Invoke();
+            yield return StartCoroutine(OnPromoted());
         }
 
-        internal void Demote()
+        internal IEnumerator Demote()
         {
             CanvasGroup.interactable = false;
-            
-            OnDemote();
             Demoted.Invoke();
+            yield return StartCoroutine(OnDemoted());
         }
         
-        public void Close()
+        public IEnumerator Close()
         {
-            OnClose();
-            Destroy(gameObject);
             Closed.Invoke();
+            yield return StartCoroutine(OnClose());
+            Destroy(gameObject);
         }
 
+        protected abstract IEnumerator OnPromoted();
+        protected abstract IEnumerator OnDemoted();
+        protected abstract IEnumerator OnClose();
+
         protected virtual void OnAwake() {}
-
-        protected abstract void OnClose();
-
-        protected abstract void OnPromote();
-
-        protected abstract void OnDemote();
         
         #endregion
     }
