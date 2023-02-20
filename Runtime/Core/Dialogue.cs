@@ -3,7 +3,7 @@ using JordanTama.ServiceLocator;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace UI.Core
+namespace JordanTama.UI.Core
 {
     /// <summary>
     /// A Dialogue is a collection of <see cref="DialogueComponent{T}"/>s that should be presented and interacted with at the same time.

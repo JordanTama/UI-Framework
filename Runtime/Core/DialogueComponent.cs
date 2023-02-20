@@ -1,7 +1,7 @@
 ﻿using JordanTama.ServiceLocator;
 using UnityEngine;
 
-namespace UI.Core
+namespace JordanTama.UI.Core
 {
     /// <summary>
     /// A UIComponent is any UI element that exists as part of a <see cref="Core.Dialogue"/>. All UI Elements should extend this class. 

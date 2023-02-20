@@ -5,7 +5,7 @@ using System.Linq;
 using JordanTama.ServiceLocator;
 using UnityEngine.Events;
 
-namespace UI.Core
+namespace JordanTama.UI.Core
 {
     /// <summary>
     /// A singleton manager responsible for controlling the <see cref="Dialogue"/> 'stack'.
