@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using JordanTama.ServiceLocator;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace JordanTama.UI.Core
@@ -21,47 +23,56 @@ namespace JordanTama.UI.Core
         /// Add a <see cref="Dialogue"/> to the top of the stack.
         /// </summary>
         /// <param name="dialogue">The <see cref="Dialogue"/> to be added.</param>
+        /// <param name="delay">The time to wait between demoting <c>dialogue</c> and promoting the next, in seconds.</param>
         /// <typeparam name="T">The type of <see cref="Dialogue"/>.</typeparam>
-        internal IEnumerator Add<T>(T dialogue) where T : Dialogue
+        internal async void Add<T>(T dialogue, float delay = 0f) where T : Dialogue
         {
             Dialogue front = _dialogues.FirstOrDefault();
+            if (front != null)
+                front.Demote();
+
+            if (delay > 0f)
+            {
+                await Task.Delay((int) (delay * 1000f));
+                if (!Application.isPlaying)
+                    return;
+            }
             
             _dialogues.Insert(0, dialogue);
             DialogueAdded.Invoke(dialogue);
-            
-            if (front != null)
-                yield return front.StartCoroutine(front.Demote());
 
-            yield return dialogue.StartCoroutine(dialogue.Promote());
+            dialogue.Promote();
         }
 
         /// <summary>
         /// Remove a <see cref="Dialogue"/> from the stack.
         /// </summary>
         /// <param name="dialogue">The <see cref="Dialogue"/> to remove.</param>
-        internal IEnumerator Remove(Dialogue dialogue)
+        internal void Remove(Dialogue dialogue)
         {
             _dialogues.Remove(dialogue);
-            yield return dialogue.Close();
+            dialogue.Close();
         }
 
         /// <summary>
         /// Remove the currently active <see cref="Dialogue"/> from the top of the stack.
         /// </summary>
         /// <returns>Returns the <see cref="Dialogue"/> that was removed.</returns>
-        public IEnumerator Pop()
+        public async void Pop(float delay = 0f)
         {
             Dialogue removed = Peek();
 
             if (removed != null)
             {
                 _dialogues.Remove(removed);
-                yield return removed.StartCoroutine(removed.Close());
+                removed.Close();
             }
+
+            await Task.Delay((int) (delay * 1000f));
 
             Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
-                yield return front.StartCoroutine(front.Promote());
+                front.Promote();
         }
 
         /// <summary>
@@ -77,8 +88,12 @@ namespace JordanTama.UI.Core
         /// <returns>Returns the first instance of <c>T</c> in the stack, starting from the top.</returns>
         internal T GetDialogue<T>() where T : Dialogue => _dialogues.Find(d => d is T) as T;
         
+        #region IService
+        
         public void OnRegistered() { }
         
         public void OnUnregistered() { }
+        
+        #endregion
     }
 }

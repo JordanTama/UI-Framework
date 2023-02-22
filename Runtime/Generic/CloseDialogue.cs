@@ -4,11 +4,7 @@ namespace JordanTama.UI.Generic
 {
     public class CloseDialogue : DialogueComponent<Dialogue>
     {
-        public void Close()
-        {
-            if (Service.Peek() == Dialogue)
-                StartCoroutine(Service.Pop());
-        }
+        public void Close() => Service.Pop();
         
         protected override void Subscribe() { }
         

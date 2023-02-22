@@ -11,9 +11,9 @@ namespace JordanTama.UI.Generic
         public void Open()
         {
             Instantiate(dialoguePrefab);
-            
+
             if (closeThisDialogue)
-                StartCoroutine(Service.Pop());
+                Service.Pop();
         }
 
         protected override void Subscribe() { }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using JordanTama.ServiceLocator;
+﻿using JordanTama.ServiceLocator;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,7 +27,7 @@ namespace JordanTama.UI.Core
             
             OnAwake();
             
-            StartCoroutine(Service.Add(this));
+            Service.Add(this);
         }
 
         #endregion
@@ -36,30 +35,29 @@ namespace JordanTama.UI.Core
         
         #region Dialogue
 
-        internal IEnumerator Promote()
+        internal void Promote()
         {
-            CanvasGroup.interactable = true;
+            OnPromoted();
             Promoted.Invoke();
-            yield return StartCoroutine(OnPromoted());
         }
 
-        internal IEnumerator Demote()
+        internal void Demote()
         {
-            CanvasGroup.interactable = false;
+            OnDemoted();
             Demoted.Invoke();
-            yield return StartCoroutine(OnDemoted());
         }
         
-        public IEnumerator Close()
+        public void Close()
         {
+            OnClose();
             Closed.Invoke();
-            yield return StartCoroutine(OnClose());
-            Destroy(gameObject);
         }
 
-        protected abstract IEnumerator OnPromoted();
-        protected abstract IEnumerator OnDemoted();
-        protected abstract IEnumerator OnClose();
+        protected virtual void OnPromoted() => CanvasGroup.interactable = true;
+
+        protected virtual void OnDemoted() => CanvasGroup.interactable = false;
+
+        protected virtual void OnClose() => Destroy(gameObject);
 
         protected virtual void OnAwake() {}
         
