@@ -24,8 +24,9 @@ namespace JordanTama.UI.Core
         /// </summary>
         /// <param name="dialogue">The <see cref="Dialogue"/> to be added.</param>
         /// <param name="delay">The time to wait between demoting <c>dialogue</c> and promoting the next, in seconds.</param>
+        /// <param name="onComplete">Action to invoke once <c>dialogue</c> has been added.</param>
         /// <typeparam name="T">The type of <see cref="Dialogue"/>.</typeparam>
-        internal async void Add<T>(T dialogue, float delay = 0f) where T : Dialogue
+        internal async void Add<T>(T dialogue, float delay = 0f, Action onComplete = null) where T : Dialogue
         {
             Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
@@ -33,7 +34,9 @@ namespace JordanTama.UI.Core
 
             if (delay > 0f)
             {
+                Debug.Log(Time.time);
                 await Task.Delay((int) (delay * 1000f));
+                Debug.Log(Time.time);
                 if (!Application.isPlaying)
                     return;
             }
@@ -42,6 +45,7 @@ namespace JordanTama.UI.Core
             DialogueAdded.Invoke(dialogue);
 
             dialogue.Promote();
+            onComplete?.Invoke();
         }
 
         /// <summary>

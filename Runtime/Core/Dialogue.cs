@@ -17,7 +17,6 @@ namespace JordanTama.UI.Core
         protected UIService Service;
         protected CanvasGroup CanvasGroup;
         
-        
         #region MonoBehaviour
 
         private void Awake()
@@ -26,12 +25,9 @@ namespace JordanTama.UI.Core
             CanvasGroup = GetComponent<CanvasGroup>();
             
             OnAwake();
-            
-            Service.Add(this);
         }
 
         #endregion
-        
         
         #region Dialogue
 

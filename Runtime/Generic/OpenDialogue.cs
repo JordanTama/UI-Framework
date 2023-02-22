@@ -5,15 +5,14 @@ namespace JordanTama.UI.Generic
 {
     public class OpenDialogue : DialogueComponent<Dialogue>
     {
-        [SerializeField] private Dialogue dialoguePrefab;
+        [SerializeField] private GameObject dialoguePrefab;
         [SerializeField] private bool closeThisDialogue;
+        [SerializeField] private float delay;
         
         public void Open()
         {
-            Instantiate(dialoguePrefab);
-
-            if (closeThisDialogue)
-                Service.Pop();
+            Dialogue dialogue = Instantiate(dialoguePrefab).GetComponent<Dialogue>();
+            Service.Add(dialogue, delay, closeThisDialogue ? () => Service.Pop() : null);
         }
 
         protected override void Subscribe() { }
