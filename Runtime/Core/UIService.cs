@@ -17,7 +17,7 @@ namespace JordanTama.UI.Core
     {
         internal readonly UnityEvent<Dialogue> DialogueAdded = new();
         
-        internal readonly List<Dialogue> _dialogues = new();
+        private readonly List<Dialogue> _dialogues = new();
 
         /// <summary>
         /// Add a <see cref="Dialogue"/> to the top of the stack.

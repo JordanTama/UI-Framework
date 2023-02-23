@@ -23,12 +23,7 @@ namespace JordanTama.UI.Core
 
         private void OnEnable()
         {
-            Dialogue = Service.GetDialogue<T>();
-            if (Dialogue)
-                Subscribe();
-            else
-                Service.DialogueAdded.AddListener(OnDialogueAdded);
-            
+            Service.DialogueAdded.AddListener(OnDialogueAdded);
             OnComponentEnabled();
         }
 
@@ -58,8 +53,6 @@ namespace JordanTama.UI.Core
             Dialogue = compatible;
 
             Subscribe();
-            string s = Service._dialogues.Aggregate("", (current, d) => current + d.gameObject.name + "\n");
-            Debug.Log(s);
         }
         
         protected virtual void OnComponentAwake() {}
