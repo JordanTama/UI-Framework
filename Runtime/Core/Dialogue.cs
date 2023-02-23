@@ -23,6 +23,7 @@ namespace JordanTama.UI.Core
         {
             Locator.Get(out Service);
             CanvasGroup = GetComponent<CanvasGroup>();
+            CanvasGroup.interactable = false;
             
             OnAwake();
         }

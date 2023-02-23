@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using JordanTama.ServiceLocator;
+﻿using JordanTama.ServiceLocator;
 using UnityEngine;
 
 namespace JordanTama.UI.Core
@@ -35,10 +34,7 @@ namespace JordanTama.UI.Core
             Dialogue = null;
         }
 
-        private void Start()
-        {
-            OnComponentStart();
-        }
+        private void Start() => OnComponentStart();
 
         #endregion
         

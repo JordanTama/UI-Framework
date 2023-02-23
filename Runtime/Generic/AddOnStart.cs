@@ -1,7 +1,8 @@
 using JordanTama.ServiceLocator;
+using JordanTama.UI.Core;
 using UnityEngine;
 
-namespace JordanTama.UI.Core
+namespace JordanTama.UI.Generic
 {
     [RequireComponent(typeof(Dialogue))]
     public class AddOnStart : MonoBehaviour
