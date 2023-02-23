@@ -17,7 +17,7 @@ namespace JordanTama.UI.Core
     {
         internal readonly UnityEvent<Dialogue> DialogueAdded = new();
         
-        private readonly List<Dialogue> _dialogues = new();
+        internal readonly List<Dialogue> _dialogues = new();
 
         /// <summary>
         /// Add a <see cref="Dialogue"/> to the top of the stack.
@@ -31,18 +31,16 @@ namespace JordanTama.UI.Core
             Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
                 front.Demote();
-
-            if (delay > 0f)
-            {
-                Debug.Log(Time.time);
-                await Task.Delay((int) (delay * 1000f));
-                Debug.Log(Time.time);
-                if (!Application.isPlaying)
-                    return;
-            }
             
             _dialogues.Insert(0, dialogue);
             DialogueAdded.Invoke(dialogue);
+            
+            if (delay > 0f)
+            {
+                await Task.Delay((int) (delay * 1000f));
+                if (!Application.isPlaying)
+                    return;
+            }
 
             dialogue.Promote();
             onComplete?.Invoke();

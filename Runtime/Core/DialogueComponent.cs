@@ -1,4 +1,5 @@
-﻿using JordanTama.ServiceLocator;
+﻿using System.Linq;
+using JordanTama.ServiceLocator;
 using UnityEngine;
 
 namespace JordanTama.UI.Core
@@ -12,7 +13,6 @@ namespace JordanTama.UI.Core
         protected UIService Service;
         protected T Dialogue;
         
-        
         #region MonoBehaviour
         
         private void Awake()
@@ -24,7 +24,6 @@ namespace JordanTama.UI.Core
         private void OnEnable()
         {
             Dialogue = Service.GetDialogue<T>();
-            
             if (Dialogue)
                 Subscribe();
             else
@@ -48,18 +47,19 @@ namespace JordanTama.UI.Core
 
         #endregion
         
-        
         #region UIComponent
         
         private void OnDialogueAdded(Dialogue addedDialogue)
         {
-            if (!(addedDialogue is T compatible))
+            if (addedDialogue is not T compatible)
                 return;
 
             Service.DialogueAdded.RemoveListener(OnDialogueAdded);
             Dialogue = compatible;
 
             Subscribe();
+            string s = Service._dialogues.Aggregate("", (current, d) => current + d.gameObject.name + "\n");
+            Debug.Log(s);
         }
         
         protected virtual void OnComponentAwake() {}
