@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -75,6 +74,14 @@ namespace JordanTama.UI.Core
             Dialogue front = _dialogues.FirstOrDefault();
             if (front != null)
                 front.Promote();
+        }
+
+        public void Close(Dialogue dialogue)
+        {
+            if (_dialogues.Contains(dialogue))
+                _dialogues.Remove(dialogue);
+
+            dialogue.Close();
         }
 
         /// <summary>

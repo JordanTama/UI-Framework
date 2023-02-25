@@ -41,7 +41,7 @@ namespace JordanTama.UI.Core
         #region UIComponent
         
         private void OnDialogueAdded(Dialogue addedDialogue)
-        {
+        { 
             if (addedDialogue is not T compatible)
                 return;
 

@@ -12,7 +12,7 @@ namespace JordanTama.UI.Generic
         public void Open()
         {
             Dialogue dialogue = Instantiate(dialoguePrefab).GetComponent<Dialogue>();
-            Service.Add(dialogue, delay, closeThisDialogue ? () => Service.Pop() : null);
+            Service.Add(dialogue, delay, closeThisDialogue ? () => Service.Close(Dialogue) : null);
         }
 
         protected override void Subscribe() { }
