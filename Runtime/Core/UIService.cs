@@ -98,6 +98,8 @@ namespace JordanTama.UI.Core
         internal T GetDialogue<T>() where T : Dialogue => _dialogues.Find(d => d is T) as T;
         
         #region IService
+
+        public string LogPrefix => "UI SERVICE";
         
         public void OnRegistered() { }
         
